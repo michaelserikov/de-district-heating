@@ -1,0 +1,113 @@
+weather_year: 2024
+step_hours: 6
+discount_rate: 0.05
+demand:
+  annual_gwh: 1000
+  hot_water_share: 0.15
+  loss_share: 0.12
+  heating_limit_c: 15.0
+  smoothing:
+  - 0.5
+  - 0.25
+  - 0.125
+  - 0.125
+  day_factor: 1.1
+  night_factor: 0.85
+network_temperature:
+  supply_cold_c: 95.0
+  t_cold_c: -12.0
+  supply_warm_c: 75.0
+  t_warm_c: 15.0
+  return_c: 45.0
+cop:
+  lorenz_quality: 0.5
+  approach_k: 3.0
+  sewage_mean_c: 14.0
+  sewage_amplitude_c: 5.0
+  sewage_potential_mw: 40
+prices:
+  grid_charges_eur_mwh: 45
+  biomass_eur_mwh: 30
+  biomass_limit_gwh: 300
+  chp_bonus_eur_mwh: 0
+  scenario: central
+price_scenarios:
+  low:
+    gas:
+    - 28
+    - 25
+    - 22
+    - 20
+    co2:
+    - 70
+    - 85
+    - 100
+    - 110
+    power:
+    - 70
+    - 65
+    - 60
+    - 60
+  central:
+    gas:
+    - 35
+    - 33
+    - 32
+    - 30
+    co2:
+    - 90
+    - 120
+    - 150
+    - 180
+    power:
+    - 85
+    - 80
+    - 78
+    - 75
+  high:
+    gas:
+    - 50
+    - 48
+    - 45
+    - 45
+    co2:
+    - 130
+    - 170
+    - 210
+    - 250
+    power:
+    - 110
+    - 105
+    - 100
+    - 100
+pathway:
+  years:
+  - 2030
+  - 2035
+  - 2040
+  - 2045
+  non_fossil_share:
+  - 0.3
+  - 0.3
+  - 0.8
+  - 1.0
+  period_years: 5
+  chp_retire_after: 2038
+existing:
+  gas_chp: 120
+  gas_boiler: 350
+  tank: 0
+limits:
+  pit_max_mwh: 3000
+new_units:
+  hp_air: 10
+  hp_sewage: 5
+  biomass: 10
+  e_boiler: 10
+  tank: 0
+  pit: 0
+subsidy:
+  bew_invest_share: 0.0
+  bew_hp_operating_eur_mwh: 0
+unserved_penalty_eur_mwh: 10000
+storage_pumping_eur_mwh: 0.5

@@ -1,0 +1,73 @@
+# All model assumptions in one place. Every number here is an assumption for an illustrative German city
+# district heating network; sources or reasoning in the comment next to it. Change a value here or override it
+# with --set key=value on the command line (see docs/user_guide.md).
+
+weather_year: 2024           # DWD Dresden-Klotzsche temperature and SMARD day-ahead prices of this year
+step_hours: 6                # time resolution of the pathway runs (1 = hourly); WP4 compares 1, 3 and 6 h
+discount_rate: 0.05          # real, for annuities and NPV
+
+demand:
+  annual_gwh: 1000           # heat fed into the network in the weather year, incl. network losses (illustrative)
+  hot_water_share: 0.15      # of annual demand, nearly flat over the year
+  loss_share: 0.12           # network losses, flat (simplification; real losses rise with supply temperature)
+  heating_limit_c: 15.0      # space heating only below this smoothed daily temperature
+  smoothing: [0.5, 0.25, 0.125, 0.125]   # weights of today and the previous 3 days (SigLinDe-style building inertia)
+  day_factor: 1.10           # 06-21 h relative to night (0.85); normalised so the daily total is unchanged
+  night_factor: 0.85
+
+network_temperature:          # sliding supply temperature, sets the heat-pump sink
+  supply_cold_c: 95.0        # at or below t_cold
+  t_cold_c: -12.0
+  supply_warm_c: 75.0        # at or above t_warm
+  t_warm_c: 15.0
+  return_c: 45.0             # return temperature (heat pumps heat the water from return to supply)
+
+cop:
+  lorenz_quality: 0.50       # share of the ideal Lorenz-cycle COP reached by large compression heat pumps
+  approach_k: 3.0            # temperature difference across heat exchangers on each side
+  sewage_mean_c: 14.0        # treated waste water temperature: mean and seasonal amplitude (warmest in August)
+  sewage_amplitude_c: 5.0
+  sewage_potential_mw: 40    # heat output limit of waste-water heat pumps (source potential, illustrative)
+
+prices:
+  grid_charges_eur_mwh: 45   # added to the day-ahead price for electricity bought by heat pumps and electric boilers
+                             # (network charges, electricity tax, levies; large consumer, illustrative)
+  biomass_eur_mwh: 30        # wood chips delivered (DEA/ENSPRESO is lower; German market prices higher, assumption)
+  biomass_limit_gwh: 300     # sustainable local wood fuel available per year (assumption)
+  chp_bonus_eur_mwh: 0       # KWKG bonus on CHP electricity; sensitivity only
+  scenario: central          # see price_scenarios
+
+price_scenarios:             # milestone-year levels; hourly power price = weather-year shape scaled to the mean
+  low:     {gas: [28, 25, 22, 20], co2: [70, 85, 100, 110],  power: [70, 65, 60, 60]}
+  central: {gas: [35, 33, 32, 30], co2: [90, 120, 150, 180], power: [85, 80, 78, 75]}
+  high:    {gas: [50, 48, 45, 45], co2: [130, 170, 210, 250], power: [110, 105, 100, 100]}
+
+pathway:
+  years: [2030, 2035, 2040, 2045]
+  non_fossil_share: [0.30, 0.30, 0.80, 1.00]   # of heat produced; WPG para 29: 30% from 2030, 80% from 2040; climate neutral 2045
+  period_years: 5            # each milestone year stands for five years
+  chp_retire_after: 2038     # existing gas CHP leaves after this year (end of technical life, assumption)
+
+existing:                     # MW heat output; existing assets carry no capex
+  gas_chp: 120               # back-pressure CHP, electricity = heat (DEA c_b 1.0)
+  gas_boiler: 350
+  tank: 0                    # MWh
+
+limits:
+  pit_max_mwh: 3000          # seasonal pit storage: land near the network is the limit in a city (assumption)
+
+new_units:                    # module size for the MILP (MW heat or MWh); 0 = continuous
+  hp_air: 10
+  hp_sewage: 5
+  biomass: 10
+  e_boiler: 10
+  tank: 0
+  pit: 0
+
+subsidy:
+  bew_invest_share: 0.0      # BEW modules 2/3: up to 40% of eligible capex (scenario switch)
+  bew_hp_operating_eur_mwh: 0  # BEW module 4 operating support per MWh heat from heat pumps (capped at 92; scenario)
+
+unserved_penalty_eur_mwh: 10000   # priced slack: shows where and when a run cannot meet demand instead of failing
+storage_pumping_eur_mwh: 0.5      # pumping and handling cost per MWh discharged from heat storage (small; it also
+                                  # stops the LP from charging and discharging the same store at once)

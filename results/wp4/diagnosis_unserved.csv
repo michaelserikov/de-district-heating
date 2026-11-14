@@ -1,0 +1,8 @@
+,0
+status,optimal
+unserved_gwh,119.49294337437648
+hours_short,1623
+peak_shortfall_mw,251.79902995206828
+months,"[1, 2, 3, 4, 11, 12]"
+t_air_mean_when_short,1.556623536660505
+checks,2 of 7 failed: 2045 unserved heat (GWh) = 119; 2045 unserved hours = 1.62e+03
