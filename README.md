@@ -1,6 +1,6 @@
 # District heating transformation of a German city: investment and dispatch optimisation in Python
 
-[![tests](https://github.com/michaelserikov/de-district-heating/actions/workflows/tests.yml/badge.svg)](https://github.com/michaelserikov/de-district-heating/actions/workflows/tests.yml)
+[![tests](https://github.com/serikov-energy-systems/de-district-heating/actions/workflows/tests.yml/badge.svg)](https://github.com/serikov-energy-systems/de-district-heating/actions/workflows/tests.yml)
 
 An energy system model of an illustrative district heating network of about 1 TWh of heat per year, built in Python
 (Pyomo, solved with the open-source HiGHS solver). It decides which heat generators and storages to build between
